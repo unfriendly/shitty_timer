@@ -12,8 +12,5 @@ compiler:
 script:
   - gcc -o rdtsc '.\RDTSC Timer.c'
 
-before_install:
-  - pip install --user cpp-coveralls
-
 after_success:
   - bash <(curl -s https://codecov.io/bash)
