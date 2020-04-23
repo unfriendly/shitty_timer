@@ -1,4 +1,4 @@
-﻿// RDTSC Timer.c : Defines the entry point for the application.
+﻿// Shitty Timer I'm working on
 //
 
 #include "Timer.h"
