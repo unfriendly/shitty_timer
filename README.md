@@ -9,6 +9,6 @@ gcc -coverage -O0 ./Timer.c -o Timer
 
 # how_to_use
 
-./Timer number_of_tests delay_in_ms guest_mhz
+./Timer | number_of_tests | delay_in_ms | guest_mhz
 
 ./Timer 100 10 1000
