@@ -409,7 +409,7 @@ int main(int argc, char* argv[])
 			}
 			else {
 				ticks_counter = ticks_counter + time_scale;
-				guest_clock = guest_clock + (avg_rdtsc/time_scale);
+				guest_clock = guest_clock + (avg_rdtsc*time_scale);
 				ticks_host++;
 			}
 		}
