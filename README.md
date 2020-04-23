@@ -2,7 +2,7 @@
 
 # shitty_timer
 External clock thingy to bypass timing checks
-Cross platform POC only ATM
+(Cross platform POC only ATM)
 
 # build_command
 gcc -coverage -O0 ./Timer.c -o Timer
