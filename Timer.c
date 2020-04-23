@@ -1,4 +1,4 @@
-﻿// Shitty Timer I'm working on
+// Shitty Timer I'm working on
 //
 
 #include "Timer.h"
@@ -99,11 +99,14 @@ int main(int argc, char* argv[])
 
 	char *o;
 	char *p;
+	char *q;
 	int num_1;
   int num_2;
+	int num_3;
   errno = 0;
   long conv_1 = strtol(argv[1], &o, 10);
 	long conv_2 = strtol(argv[2], &p, 10);
+	long conv_3 = strtol(argv[3], &q, 10);
   // Check for errors: e.g., the string does not represent an integer
   // or the integer is larger than int
   if (errno != 0 || *o != '\0' || conv_1 > INT_MAX) {
@@ -121,6 +124,15 @@ int main(int argc, char* argv[])
 	} else {
 			// No error
 			num_2 = conv_2;
+	}
+	// Check for errors: e.g., the string does not represent an integer
+	// or the integer is larger than int
+	if (errno != 0 || *q != '\0' || conv_3 > INT_MAX) {
+			// Put here the handling of the error, like exiting the program with
+			// an error message
+	} else {
+			// No error
+			num_3 = conv_3;
 	}
 
 	if ( argc <= 2 ) {
@@ -355,9 +367,53 @@ int main(int argc, char* argv[])
 		printf("Locky Tricky Timer AVG Diff In Seconds: %lf\n", diff_seconds_avg);
 		printf("VMExit Timer Diff AVG: %I64d\n", count_time_avg_vmexit);
 		printf("VMExit Timer AVG Diff In Seconds: %lf\n", diff_seconds_avg_vmexit);
+		printf("==============================================\n");
+		printf("Timing Deviation in Ticks: %I64d\n", timing_deviation_ticks);
+		printf("Timing Deviation in Seconds: %lf\n", timing_deviation_seconds);
+	  printf("==============================================\n");
+
+		timing_deviation_ticks = count_time_avg - count_time_avg_vmexit;
+		timing_deviation_seconds = diff_seconds_avg - diff_seconds_avg_vmexit;
+
 		printf("Timing Deviation in Ticks: %I64d\n", timing_deviation_ticks);
 		printf("Timing Deviation in Seconds: %lf\n", timing_deviation_seconds);
 		printf("==============================================\n");
+
+    printf("Counting up at MHz: %d\n", num_3);
+
+    double time_scale = 0;
+		double num_3_d = num_3;
+		double freq_start_d = 0;
+    double freq_end_d = 0;
+		double cpu_freq_d = 0;
+		freq_start_d = rdtsc_cpu_freq();
+		sleep(1);
+    freq_end_d = rdtsc_cpu_freq();
+		cpu_freq_d = (freq_end_d-freq_start_d)/1000000;
+		time_scale = num_3_d / cpu_freq_d;
+    double ticks_counter = 0;
+		int ticks_host = 0;
+		unsigned long long guest_clock = 0;
+
+    /* for (;;) { */
+		while (ticks_host < 10) {
+		  printf("Counting up Host: %d\n", ticks_host);
+			printf("Counting up Guest: %lf\n", ticks_counter);
+			unsigned long long host_clock = rdtsc_current();
+			printf("Host Clock: %I64d\n", host_clock);
+			printf("Guest Clock: %I64d\n", guest_clock);
+			printf("Time Scale: %lf\n", time_scale);
+			printf("CPU Freq: %lf\n", cpu_freq_d);
+			if (guest_clock == 0) {
+				guest_clock = host_clock;
+			}
+			else {
+				ticks_counter = ticks_counter + time_scale;
+				guest_clock = guest_clock + (avg_rdtsc/time_scale);
+				ticks_host++;
+			}
+		}
+
 	}
 
   return 0;
