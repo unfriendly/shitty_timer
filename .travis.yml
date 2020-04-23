@@ -1,10 +1,20 @@
 language: c
 
+sudo: false # only for faster builds
+
 os:
   - windows
+  - linux
 
 compiler:
   - gcc
 
 script:
   - gcc -o rdtsc '.\RDTSC Timer.c'
+
+before_install:
+  - pip install --user cpp-coveralls
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
+  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
