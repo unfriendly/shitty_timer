@@ -1,7 +1,7 @@
 ﻿// RDTSC Timer.c : Defines the entry point for the application.
 //
 
-#include "RDTSC Timer.h"
+#include "Timer.h"
 
 static inline unsigned long long rdtsc_diff() {
 	unsigned long long ret, ret2;
