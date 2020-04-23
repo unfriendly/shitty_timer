@@ -13,6 +13,7 @@ gcc -coverage -O0 ./Timer.c -o Timer
 ./Timer 100 10 1000
 
 # example_output
+```
 PS C:\Timer> ./Timer 100 10 1000
 ==============================================
 [*] RDTSC Compare Total Diff: 5424
@@ -101,3 +102,4 @@ Host Clock: 27880676786152
 Guest Clock: 27880660822911
 Time Scale: 0.385520
 CPU Freq: 2593.896030
+```
