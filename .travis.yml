@@ -16,3 +16,10 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+
+deploy:
+  provider: releases
+  file: "Timer.exe"
+  skip_cleanup: true
+  on:
+    tags: true
