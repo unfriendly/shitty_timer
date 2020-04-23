@@ -10,7 +10,7 @@ compiler:
   - gcc
 
 script:
-  - gcc -o rdtsc '.\RDTSC Timer.c'
+  - gcc -o rdtsc ./Timer.c
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
