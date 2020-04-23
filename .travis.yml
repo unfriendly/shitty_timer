@@ -11,7 +11,7 @@ compiler:
 
 script:
   - gcc -coverage -O0 ./Timer.c -o Timer
-  - ./Timer
+  - ./Timer 10 1
   - gcov Timer.c
 
 after_success:
