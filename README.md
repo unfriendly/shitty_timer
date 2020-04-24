@@ -20,7 +20,7 @@ gcc -coverage -O0 ./Timer.c -o Timer
 
 # example_output
 ```
-PS C:\Users\suici\Downloads\RDTSC Timer> ./Timer 10 10 1000
+PS C:\Timer> ./Timer 10 10 1000
 ==============================================
 [*] RDTSC Compare Total Diff: 7466
 [*] RDTSC Locky Tricky AVG Diff: 16
