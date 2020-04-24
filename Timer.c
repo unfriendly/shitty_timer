@@ -404,8 +404,18 @@ int main(int argc, char* argv[])
 				guest_clock = host_clock;
 			}
 			else {
-				unsigned long long host_clock = rdtsc_current();
+				unsigned long long host_clock;
+				unsigned long long leaf_check;
+				unsigned eax, edx, lax, ldx;
+				lax = 1;
+				ldx = 2;
+				__asm__ __volatile__("rdtsc" : "=a" (eax), "=d" (edx));
+				host_clock = ((unsigned long long)eax) | (((unsigned long long)edx) << 32);
+				leaf_check = ((unsigned long long)lax) | (((unsigned long long)ldx) << 32);
 				guest_clock = (guest_clock + time_multiplier);
+				unsigned long long eaxd, edxd;
+				eaxd = ((unsigned long long)eax);
+				edxd = ((unsigned long long)edx);
 				printf("Counting up Host: %d\n", ticks_host);
 				printf("Counting up Guest: %lf\n", ticks_counter);
 				printf("Host Clock: %I64d\n", host_clock);
@@ -414,6 +424,9 @@ int main(int argc, char* argv[])
 				printf("Time Multiplier: %lf\n", time_multiplier);
 				printf("Host Freq: %lf\n", cpu_freq_d);
 				printf("Guest Freq: %lf\n", num_3_d);
+				printf("Host CPU Registers: EAX=%I64d", eaxd);
+				printf(" | EDX=%I64d\n", edxd);
+				printf("Leaf Check EAX=1 and EDX=2: Leaf=%I64d\n", leaf_check);
 				printf("------------------------\n");
 				ticks_counter = ticks_counter + time_scale;
 				ticks_host++;
