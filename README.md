@@ -4,6 +4,8 @@
 External clock thingy to bypass timing checks
 (Cross platform POC only ATM)
 
+Right now its 99.99987% accurate for 10 calls, at 10ms, and counting at 1000MHz, which means by the time 1 second passes it would be 99.99857% accurate (each second is minus 0.0013% accuracy), so it drifts a lot)
+
 # build_command
 ```
 gcc -coverage -O0 ./Timer.c -o Timer
