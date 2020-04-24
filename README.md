@@ -1,4 +1,5 @@
 ![C/C++ CI](https://github.com/RawTechnique/shitty_timer/workflows/C/C++%20CI/badge.svg) 
+[![codecov](https://codecov.io/gh/RawTechnique/shitty_timer/branch/master/graph/badge.svg)](https://codecov.io/gh/RawTechnique/shitty_timer)
 
 # shitty_timer
 External clock thingy to bypass timing checks
