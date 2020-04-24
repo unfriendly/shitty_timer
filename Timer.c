@@ -414,6 +414,7 @@ int main(int argc, char* argv[])
 				printf("Time Multiplier: %lf\n", time_multiplier);
 				printf("Host Freq: %lf\n", cpu_freq_d);
 				printf("Guest Freq: %lf\n", num_3_d);
+				printf("------------------------\n");
 				ticks_counter = ticks_counter + time_scale;
 				ticks_host++;
 			}
