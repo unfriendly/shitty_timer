@@ -12,12 +12,12 @@ gcc -coverage -O0 ./Timer.c -o Timer
 # how_to_use
 ./Timer | number_of_tests | delay_in_ms | guest_mhz
 ```
-./Timer 100 10 1000
+./Timer 10 10 1000
 ```
 
 # example_output
 ```
-PS C:\Timer> ./Timer 100 10 1000
+PS C:\Timer> ./Timer 10 10 1000
 ==============================================
 [*] RDTSC Compare Total Diff: 4514
 [*] RDTSC Locky Tricky AVG Diff: 17
@@ -26,7 +26,7 @@ PS C:\Timer> ./Timer 100 10 1000
 [*] Starting Timer
 [*] Timer Delay in miliseconds: 10
 ==============================================
-Counting To: 100
+Counting To: 10
 Locky Tricky Timer Diff AVG: 28484187
 Locky Tricky Timer AVG Diff In Seconds: 0.010989
 VMExit Timer Diff AVG: 28548910
