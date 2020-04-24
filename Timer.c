@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
 		unsigned long long timing_deviation_ticks = 0;
 		double timing_deviation_seconds = 0;
 
-    if ( argc <= 2 ) {
+    if ( argc <= 3 ) {
 			while (start_timer < 10) {
 				count_1_time = rdtsc_current();
 				Sleep(10000);
@@ -300,7 +300,7 @@ int main(int argc, char* argv[])
     count_2_time = 0;
 		count_time_diff = 0;
 
-	  if ( argc <= 2 ) {
+	  if ( argc <= 3 ) {
 		  while (start_timer < 10) {
 			count_1_time = rdtsc_current_vmexit();
 			Sleep(10000);
@@ -397,41 +397,87 @@ int main(int argc, char* argv[])
 		double time_multiplier = 0;
 		time_multiplier = (avg_rdtsc*time_scale);
 
-    /* for (;;) { */
-		while (ticks_host < 10) {
-			if (guest_clock == 0) {
-				unsigned long long host_clock = rdtsc_current();
-				guest_clock = host_clock;
-			}
-			else {
-				unsigned long long host_clock;
-				unsigned long long leaf_check;
-				unsigned eax, edx, lax, ldx;
-				lax = 1;
-				ldx = 2;
-				__asm__ __volatile__("rdtsc" : "=a" (eax), "=d" (edx));
-				host_clock = ((unsigned long long)eax) | (((unsigned long long)edx) << 32);
-				leaf_check = ((unsigned long long)lax) | (((unsigned long long)ldx) << 32);
-				guest_clock = (guest_clock + time_multiplier);
-				unsigned long long eaxd, edxd;
-				eaxd = ((unsigned long long)eax);
-				edxd = ((unsigned long long)edx);
-				printf("Counting up Host: %d\n", ticks_host);
-				printf("Counting up Guest: %lf\n", ticks_counter);
-				printf("Host Clock: %I64d\n", host_clock);
-				printf("Guest Clock: %lf\n", guest_clock);
-				printf("Time Scale: %lf\n", time_scale);
-				printf("Time Multiplier: %lf\n", time_multiplier);
-				printf("Host Freq: %lf\n", cpu_freq_d);
-				printf("Guest Freq: %lf\n", num_3_d);
-				printf("Host CPU Registers: EAX=%I64d", eaxd);
-				printf(" | EDX=%I64d\n", edxd);
-				printf("Leaf Check EAX=1 and EDX=2: Leaf=%I64d\n", leaf_check);
-				printf("------------------------\n");
-				ticks_counter = ticks_counter + time_scale;
-				ticks_host++;
+		if ( argc <= 3 ) {
+      /* for (;;) { */
+			while (ticks_host < 10) {
+				if (guest_clock == 0) {
+					unsigned long long host_clock = rdtsc_current();
+					guest_clock = host_clock;
+				}
+				else {
+					unsigned long long host_clock;
+					unsigned long long leaf_check;
+					double math_check;
+					unsigned eax, edx, lax, ldx;
+					lax = 1;
+					ldx = 2;
+					__asm__ __volatile__("rdtsc" : "=a" (eax), "=d" (edx));
+					host_clock = ((unsigned long long)eax) | (((unsigned long long)edx) << 32);
+					leaf_check = ((unsigned long long)lax) | (((unsigned long long)ldx) << 32);
+					guest_clock = (guest_clock + time_multiplier);
+					unsigned long long eaxd, edxd;
+					eaxd = ((unsigned long long)eax);
+					edxd = ((unsigned long long)edx);
+					math_check = (((unsigned long long)lax)<<32) | ((unsigned long long)ldx);
+					printf("Counting up Host: %d\n", ticks_host);
+					printf("Counting up Guest: %lf\n", ticks_counter);
+					printf("Host Clock: %I64d\n", host_clock);
+					printf("Guest Clock: %lf\n", guest_clock);
+					printf("Time Scale: %lf\n", time_scale);
+					printf("Time Multiplier: %lf\n", time_multiplier);
+					printf("Host Freq: %lf\n", cpu_freq_d);
+					printf("Guest Freq: %lf\n", num_3_d);
+					printf("Host CPU Registers: EAX=%I64d", eaxd);
+					printf(" | EDX=%I64d\n", edxd);
+					printf("Leaf Check EAX=1 and EDX=2: Leaf=%I64d\n", leaf_check);
+					printf("Leaf Check EAX=1 and EDX=2: Math Check=%lf\n", math_check);
+					printf("------------------------\n");
+					ticks_counter = ticks_counter + time_scale;
+					ticks_host++;
+				}
 			}
 		}
+		else {
+			/* for (;;) { */
+			while (ticks_host < num_1) {
+				if (guest_clock == 0) {
+					unsigned long long host_clock = rdtsc_current();
+					guest_clock = host_clock;
+				}
+				else {
+					unsigned long long host_clock;
+					unsigned long long leaf_check;
+					double math_check;
+					unsigned eax, edx, lax, ldx;
+					lax = 1;
+					ldx = 2;
+					__asm__ __volatile__("rdtsc" : "=a" (eax), "=d" (edx));
+					host_clock = ((unsigned long long)eax) | (((unsigned long long)edx) << 32);
+					leaf_check = ((unsigned long long)lax) | (((unsigned long long)ldx) << 32);
+					guest_clock = (guest_clock + time_multiplier);
+					unsigned long long eaxd, edxd;
+					eaxd = ((unsigned long long)eax);
+					edxd = ((unsigned long long)edx);
+					math_check = (((unsigned long long)lax)<<32) | ((unsigned long long)ldx);
+					printf("Counting up Host: %d\n", ticks_host);
+					printf("Counting up Guest: %lf\n", ticks_counter);
+					printf("Host Clock: %I64d\n", host_clock);
+					printf("Guest Clock: %lf\n", guest_clock);
+					printf("Time Scale: %lf\n", time_scale);
+					printf("Time Multiplier: %lf\n", time_multiplier);
+					printf("Host Freq: %lf\n", cpu_freq_d);
+					printf("Guest Freq: %lf\n", num_3_d);
+					printf("Host CPU Registers: EAX=%I64d", eaxd);
+					printf(" | EDX=%I64d\n", edxd);
+					printf("Leaf Check EAX=1 and EDX=2: Leaf=%I64d\n", leaf_check);
+					printf("Leaf Check EAX=1 and EDX=2: Math Check=%lf\n", math_check);
+					printf("------------------------\n");
+					ticks_counter = ticks_counter + time_scale;
+					ticks_host++;
+				}
+			}
+		}
+
 
 	}
 
