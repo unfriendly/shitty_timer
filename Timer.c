@@ -393,23 +393,28 @@ int main(int argc, char* argv[])
 		time_scale = num_3_d / cpu_freq_d;
     double ticks_counter = 0;
 		int ticks_host = 0;
-		unsigned long long guest_clock = 0;
+		double guest_clock = 0;
+		double time_multiplier = 0;
+		time_multiplier = (avg_rdtsc*time_scale);
 
     /* for (;;) { */
 		while (ticks_host < 10) {
-		  printf("Counting up Host: %d\n", ticks_host);
-			printf("Counting up Guest: %lf\n", ticks_counter);
-			unsigned long long host_clock = rdtsc_current();
-			printf("Host Clock: %I64d\n", host_clock);
-			printf("Guest Clock: %I64d\n", guest_clock);
-			printf("Time Scale: %lf\n", time_scale);
-			printf("CPU Freq: %lf\n", cpu_freq_d);
 			if (guest_clock == 0) {
+				unsigned long long host_clock = rdtsc_current();
 				guest_clock = host_clock;
 			}
 			else {
+				unsigned long long host_clock = rdtsc_current();
+				guest_clock = (guest_clock + time_multiplier);
+				printf("Counting up Host: %d\n", ticks_host);
+				printf("Counting up Guest: %lf\n", ticks_counter);
+				printf("Host Clock: %I64d\n", host_clock);
+				printf("Guest Clock: %lf\n", guest_clock);
+				printf("Time Scale: %lf\n", time_scale);
+				printf("Time Multiplier: %lf\n", time_multiplier);
+				printf("Host Freq: %lf\n", cpu_freq_d);
+				printf("Guest Freq: %lf\n", num_3_d);
 				ticks_counter = ticks_counter + time_scale;
-				guest_clock = guest_clock + (avg_rdtsc*time_scale);
 				ticks_host++;
 			}
 		}
