@@ -563,14 +563,20 @@ main(int argc, char * argv[]) {
 
                     guest_clock = host_clock;
                 } else {
+
                     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
                     unsigned long long host_clock;
                     unsigned long long leaf_check;
-                    double math_check;
+                    double math_check, math_check_no_shift;
                     unsigned eax, edx, lax, ldx;
                     __asm__ __volatile__("rdtsc": "=a"(eax), "=d"(edx));
-                    unsigned long long eaxd, edxd, edxdm, edxdmf, ldxd, ldxdm, ldxdmf;
+                    unsigned long long eaxd, edxd, edxdm, edxdmf, ldxd, ldxdm, ldxdmf, eaxd_change, edxd_change, eaxd_avg, edxd_avg;
                     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+                    eaxd_change = 0;
+                    edxd_change = 0;
+                    eaxd_avg = 0;
+                    edxd_avg = 0;
 
                     lax = 1;
                     ldx = 2;
@@ -582,6 +588,7 @@ main(int argc, char * argv[]) {
                     edxdm = ((unsigned long long) edx) << 32;
                     edxdmf = 32 << ((unsigned long long) edx);
                     math_check = (32 << ((unsigned long long) lax)) | ((unsigned long long) ldx);
+                    math_check_no_shift = (((unsigned long long) lax)) | ((unsigned long long) ldx);
                     ldxd = ((unsigned long long) ldx);
                     ldxdm = ((unsigned long long) ldx) << 32;
                     ldxdmf = 32 << ((unsigned long long) ldx);
@@ -601,6 +608,7 @@ main(int argc, char * argv[]) {
                     printf(" \n");
                     printf("VM Leaf Check: EAX=1 | EDX=2: Leaf=%I64d\n", leaf_check);
                     printf("VM Leaf EDX Math Check: %lf\n", math_check);
+                    printf("VM Leaf EDX No Shift Math Check: %lf\n", math_check_no_shift);
                     printf("VM Leaf EDX Math: %I64d\n", ldxdm);
                     printf("VM Leaf EDX Math Flip: %I64d\n", ldxdmf);
                     printf("------------------------\n");
@@ -608,6 +616,56 @@ main(int argc, char * argv[]) {
                     ticks_host++;
                 }
             }
+
+            /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+            int find_leaf_avg;
+            double eaxd_change, edxd_change, eaxd_avg, edxd_avg;
+            /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+            eaxd_change = 0;
+            edxd_change = 0;
+            eaxd_avg = 0;
+            edxd_avg = 0;
+
+            while (find_leaf_avg < num_1) {
+                /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+                unsigned eax, edx, eax_old, edx_old;
+                __asm__ __volatile__("rdtsc": "=a"(eax_old), "=d"(edx_old));
+                Sleep(num_2);
+                __asm__ __volatile__("rdtsc": "=a"(eax), "=d"(edx));
+                double eaxd, edxd, eaxd_old, edxd_old;
+                /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+
+                eaxd = ((unsigned long long) eax);
+                edxd = ((unsigned long long) edx);
+                eaxd_old = ((unsigned long long) eax_old);
+                edxd_old = ((unsigned long long) edx_old);
+
+                printf("EAXD: EAXD=%lf\n", eaxd);
+                printf("EDXD: EDXD=%lf\n", edxd);
+                printf("EAXD OLD: EAXD=%lf\n", eaxd_old);
+                printf("EDXD OLD: EDXD=%lf\n", edxd_old);
+
+                eaxd_change = eaxd - eaxd_old;
+                if (eaxd_avg == 0) {
+                    eaxd_avg = eaxd_change;
+                }
+                else {
+                    eaxd_avg = (eaxd_avg + eaxd_change)/2;
+                }
+
+                edxd_change = edxd - edxd_old;
+                if (edxd_avg == 0) {
+                    edxd_avg = edxd_change;
+                }
+                else {
+                    edxd_avg = (edxd_avg + edxd_change)/2;
+                }
+
+                find_leaf_avg++;
+            }
+            printf("EAX AVG: EAX=%lf\n", eaxd_avg);
+            printf("EDX AVG: EDX=%lf\n", edxd_avg);
         }
     }
 
