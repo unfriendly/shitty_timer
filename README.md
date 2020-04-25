@@ -203,4 +203,6 @@ Leaf Check EAX=1 and EDX=2: Math Check=4294967298.000000
 
   > (Compare this value to the number of recorded of calls made (and the diff of our host RDTSC call) to make sure the number is not wildly inaccurate)
 
-- Then just passthrough my external timers value for every RDTSC call
+- Then just passthrough the external timers value for every RDTSC call
+
+> (This is a simple overview and the code is alot more complex)
