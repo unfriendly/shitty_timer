@@ -569,7 +569,7 @@ main(int argc, char * argv[]) {
                     double math_check;
                     unsigned eax, edx, lax, ldx;
                     __asm__ __volatile__("rdtsc": "=a"(eax), "=d"(edx));
-                    unsigned long long eaxd, edxd;
+                    unsigned long long eaxd, edxd, edxdm, edxdf;
                     /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
                     lax = 1;
@@ -579,6 +579,8 @@ main(int argc, char * argv[]) {
                     guest_clock = (guest_clock + time_multiplier);
                     eaxd = ((unsigned long long) eax);
                     edxd = ((unsigned long long) edx);
+                    edxdm = ((unsigned long long) edx) << 32;
+                    edxdf = 32 << ((unsigned long long) edx);
                     math_check = (32 << ((unsigned long long) lax)) | ((unsigned long long) ldx);
                     printf("Counting up Host: %d\n", ticks_host);
                     printf("Counting up Guest: %lf\n", ticks_counter);
@@ -590,6 +592,8 @@ main(int argc, char * argv[]) {
                     printf("Guest Freq: %lf\n", num_3_d);
                     printf("Host CPU Registers: EAX=%I64d", eaxd);
                     printf(" | EDX=%I64d\n", edxd);
+                    printf("Leaf EDX Math: %I64d\n", edxdm);
+                    printf("Leaf EDX Math Flip: %I64d\n", edxdf);
                     printf("Leaf Check EAX=1 and EDX=2: Leaf=%I64d\n", leaf_check);
                     printf("Leaf Check EAX=1 and EDX=2: Math Check=%lf\n", math_check);
                     printf("------------------------\n");
