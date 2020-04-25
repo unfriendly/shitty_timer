@@ -203,7 +203,7 @@ main(int argc, char * argv[]) {
 
               printf("--------------\n");
 
-      */
+            */
             start_test++;
         }
     } else {
@@ -250,7 +250,7 @@ main(int argc, char * argv[]) {
 
               printf("--------------\n");
 
-      */
+            */
             start_test++;
         }
     }
@@ -335,7 +335,7 @@ main(int argc, char * argv[]) {
 
                 printf("Counting Diff In Seconds: %lf\n", diff_seconds);
 
-        */
+                */
                 if (diff_seconds_avg == 0) {
                     diff_seconds_avg = diff_seconds;
                 } else {
@@ -374,7 +374,7 @@ main(int argc, char * argv[]) {
 
                 printf("Counting Diff In Seconds: %lf\n", diff_seconds);
 
-        */
+                */
                 if (diff_seconds_avg == 0) {
                     diff_seconds_avg = diff_seconds;
                 } else {
@@ -420,7 +420,7 @@ main(int argc, char * argv[]) {
 
                 printf("Counting Diff In Seconds: %lf\n", diff_seconds);
 
-        */
+                */
                 if (diff_seconds_avg_vmexit == 0) {
                     diff_seconds_avg_vmexit = diff_seconds;
                 } else {
@@ -459,7 +459,7 @@ main(int argc, char * argv[]) {
 
                 	printf("Counting Diff In Seconds: %lf\n", diff_seconds);
 
-        */
+                */
                 if (diff_seconds_avg_vmexit == 0) {
                     diff_seconds_avg_vmexit = diff_seconds;
                 } else {
