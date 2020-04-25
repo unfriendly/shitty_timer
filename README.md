@@ -1,3 +1,4 @@
+
 ![C/C++ CI](https://github.com/RawTechnique/shitty_timer/workflows/C/C++%20CI/badge.svg) 
 [![codecov](https://codecov.io/gh/RawTechnique/shitty_timer/branch/master/graph/badge.svg)](https://codecov.io/gh/RawTechnique/shitty_timer)
 
@@ -13,7 +14,7 @@ gcc -coverage -O0 ./Timer.c -o Timer
 ```
 
 # how_to_use
-./Timer | number_of_tests | delay_in_ms | guest_mhz
+**./Timer** | **number_of_tests** | **delay_in_ms** | **guest_mhz**
 ```
 ./Timer 10 10 1000
 ```
@@ -163,3 +164,43 @@ Leaf Check EAX=1 and EDX=2: Leaf=8589934593
 Leaf Check EAX=1 and EDX=2: Math Check=4294967298.000000
 ------------------------
 ```
+
+# plans_and_implementation
+
+- (Record the time it takes on VM and real HW for a normal RDTSC call)
+
+  > (Then record it again with a forced exit call)
+
+- Create an external Timer in the VM_EXIT section of QEMU that starts an external clock on VM boot
+
+  - Copy the VM clock value on the first exit call 
+  > (then catch-up to current VM RDTSC clock time)
+  > (Record how many subsequent calls are made after the first call and store it to memory)
+
+  - Copy host clock value
+
+  > (Save value for validation later)
+
+  > (Minus largest clock value and smallest clock value and save the diff as well)
+
+- Start clock with the VM recorded value in the previous step
+
+- Count up normally but every VM_EXIT add to it using a random integer assigned from the fastest and slowest call in our previously recorded calls
+
+  > (if the fastest call is 10 somethings, and the slowest is 100 somethings, use a random number between them [aka add 45 somethings to our timer that is currently at 1000, so it would be 1045 now])
+
+- Check the VM RDTSC value for accuracy every few calls (make sure it counts up at a similar rate to the host)
+
+  > (Compare VM clock to our timer (adjust our timer to fit within margin of error))
+
+  - (Margin of error is the slowest recorded call minus our fastest call so 100ns-10ns=90ns)
+
+    - (In this example we would adjust our timer so that it is +/-90 nanoseconds from the VM diff)
+
+  - (Copy my timer and VM RDTSC value at their current state)
+
+    - (Compare both and make a diff to compare with the original diff saved)
+
+  > (Compare this value to the number of recorded of calls made (and the diff of our host RDTSC call) to make sure the number is not wildly inaccurate)
+
+- Then just passthrough my external timers value for every RDTSC call
