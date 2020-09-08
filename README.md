@@ -197,7 +197,7 @@ Leaf Check EAX=1 and EDX=2: Math Check=4294967298.000000
 
     - (In this example we would adjust our timer so that it is +/-90 nanoseconds from the VM diff)
 
-  - (Copy my timer and VM RDTSC value at their current state)
+  - (Copy the timer and VM RDTSC value at their current state)
 
     - (Compare both and make a diff to compare with the original diff saved)
 
